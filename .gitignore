@@ -1,3 +1,6 @@
 hangfire-cluster/.vs/
 hangfire-cluster/hangfire-cluster-web/obj/
 hangfire-cluster/hangfire-cluster-web/bin/
+hangfire-cluster-web/bin/
+hangfire-cluster-web/obj/
+.vs/
