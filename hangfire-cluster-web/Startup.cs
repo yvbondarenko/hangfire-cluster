@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.SqlServer;
+using hangfire_cluster_web.Classes;
 
 namespace hangfire_cluster_web
 {
@@ -26,6 +27,7 @@ namespace hangfire_cluster_web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHangfire(configuration => configuration
+                    
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
@@ -55,12 +57,16 @@ namespace hangfire_cluster_web
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
-            app.UseHangfireDashboard();
+            
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions()
+            {
+                Authorization = new[] { new CustomAuthorizeFilter() }
+            });
             RecurringJob.AddOrUpdate(() => InsertToDb(), Cron.Minutely);
             
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
